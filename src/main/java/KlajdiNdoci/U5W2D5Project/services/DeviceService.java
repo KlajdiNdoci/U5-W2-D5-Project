@@ -102,12 +102,19 @@ public class DeviceService {
             foundDevice.setUser(foundUser);
 
             if (foundDevice.getDeviceState() == DeviceState.ASSIGNED) {
-                throw new BadRequestException("The device is already assigned to another user");
+                throw new BadRequestException("The device is already assigned");
             } else if (foundDevice.getDeviceState() == DeviceState.DISMISSED) {
                 throw new BadRequestException("The device is dismissed");
             }
             foundDevice.setDeviceState(DeviceState.ASSIGNED);
         }
+        return deviceRepository.save(foundDevice);
+    }
+
+    public Device findByIdAndDismiss(int id) throws NotFoundException{
+        Device foundDevice = this.findById(id);
+        foundDevice.setDeviceState(DeviceState.DISMISSED);
+        foundDevice.setUser(null);
         return deviceRepository.save(foundDevice);
     }
 }
