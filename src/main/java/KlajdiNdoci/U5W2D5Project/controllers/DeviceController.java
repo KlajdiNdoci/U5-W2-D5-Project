@@ -64,4 +64,9 @@ public class DeviceController {
     public Device findByIdAndDismiss(@PathVariable int id){
         return deviceService.findByIdAndDismiss(id);
     }
+
+    @PatchMapping ("/{id}/service")
+    public Device findByIdAndSendToMaintenance(@PathVariable int id){
+        return deviceService.findByIdAndSendToMaintenance(id);
+    }
 }

@@ -117,4 +117,13 @@ public class DeviceService {
         foundDevice.setUser(null);
         return deviceRepository.save(foundDevice);
     }
+    public Device findByIdAndSendToMaintenance(int id) throws NotFoundException{
+        Device foundDevice = this.findById(id);
+        if (!foundDevice.getDeviceState().toString().equalsIgnoreCase("dismissed")){
+            foundDevice.setDeviceState(DeviceState.MAINTENANCE);
+        }else {
+            throw new BadRequestException("The device is dismissed");
+        }
+        return deviceRepository.save(foundDevice);
+    }
 }
