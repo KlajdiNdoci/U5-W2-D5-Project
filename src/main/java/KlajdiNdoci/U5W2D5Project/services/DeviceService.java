@@ -100,6 +100,7 @@ public class DeviceService {
         if (body.userId()!= null){
             User foundUser = userService.findById(body.userId());
             foundDevice.setUser(foundUser);
+            foundDevice.setDeviceState(DeviceState.ASSIGNED);
             if (foundDevice.getDeviceState() == DeviceState.ASSIGNED) {
                 throw new BadRequestException("The device is already assigned to another user");
             } else if (foundDevice.getDeviceState() == DeviceState.DISMISSED) {
