@@ -23,7 +23,7 @@ public class UserService {
     private Cloudinary cloudinary;
 
 
-    public Page<User> getUtenti(int page, int size, String orderBy) {
+    public Page<User> getUsers(int page, int size, String orderBy) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
         return userRepository.findAll(pageable);
     }
