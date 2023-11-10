@@ -2,6 +2,7 @@ package KlajdiNdoci.U5W2D5Project.services;
 
 import KlajdiNdoci.U5W2D5Project.entities.Device;
 import KlajdiNdoci.U5W2D5Project.entities.User;
+import KlajdiNdoci.U5W2D5Project.enums.DeviceState;
 import KlajdiNdoci.U5W2D5Project.exceptions.BadRequestException;
 import KlajdiNdoci.U5W2D5Project.exceptions.NotFoundException;
 import KlajdiNdoci.U5W2D5Project.payloads.NewUserDTO;
@@ -65,7 +66,10 @@ public class UserService {
     public void findByIdAndDelete(int id)throws NotFoundException {
         User found = this.findById(id);
         List<Device> devices = found.getDevices();
-        devices.forEach(device -> device.setUser(null));
+        for (Device device : devices) {
+            device.setUser(null);
+            device.setDeviceState(DeviceState.AVAILABLE);
+        }
         userRepository.delete(found);
     }
 
