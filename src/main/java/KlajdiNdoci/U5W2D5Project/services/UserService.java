@@ -32,6 +32,7 @@ public class UserService {
     public User save(NewUserDTO body) throws IOException {
         User newUser = new User();
         newUser.setAvatar("https://ui-avatars.com/api/?name=" + body.name() + "+" + body.surname());
+        newUser.setUsername(body.username());
         newUser.setName(body.name());
         newUser.setSurname(body.surname());
         newUser.setEmail(body.email());

@@ -1,11 +1,9 @@
 package KlajdiNdoci.U5W2D5Project.payloads;
 
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-import java.time.LocalDate;
 
 public record NewUserDTO(
         @NotEmpty(message = "You have to enter a username!")
