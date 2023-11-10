@@ -1,6 +1,7 @@
 package KlajdiNdoci.U5W2D5Project.services;
 
 import KlajdiNdoci.U5W2D5Project.entities.User;
+import KlajdiNdoci.U5W2D5Project.exceptions.BadRequestException;
 import KlajdiNdoci.U5W2D5Project.exceptions.NotFoundException;
 import KlajdiNdoci.U5W2D5Project.payloads.NewUserDTO;
 import KlajdiNdoci.U5W2D5Project.repositories.UserRepository;
@@ -30,6 +31,11 @@ public class UserService {
     }
 
     public User save(NewUserDTO body) throws IOException {
+
+        userRepository.findByEmail(body.email()).ifPresent( user -> {
+            throw new BadRequestException("The email " + user.getEmail() + " has already been used!");
+        });
+
         User newUser = new User();
         newUser.setAvatar("https://ui-avatars.com/api/?name=" + body.name() + "+" + body.surname());
         newUser.setUsername(body.username());
