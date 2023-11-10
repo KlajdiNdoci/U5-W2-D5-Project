@@ -3,6 +3,8 @@ package KlajdiNdoci.U5W2D5Project.services;
 import KlajdiNdoci.U5W2D5Project.entities.Device;
 import KlajdiNdoci.U5W2D5Project.entities.User;
 import KlajdiNdoci.U5W2D5Project.enums.DeviceState;
+import KlajdiNdoci.U5W2D5Project.enums.DeviceType;
+import KlajdiNdoci.U5W2D5Project.exceptions.BadRequestException;
 import KlajdiNdoci.U5W2D5Project.exceptions.NotFoundException;
 import KlajdiNdoci.U5W2D5Project.payloads.NewDeviceDTO;
 import KlajdiNdoci.U5W2D5Project.repositories.DeviceRepository;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @Service
 public class DeviceService {
@@ -34,10 +37,18 @@ public class DeviceService {
     }
 
     public Device save(NewDeviceDTO body) throws IOException {
-        User foundUser = userService.findById(body.deviceId());
+        User foundUser = userService.findById(body.userId());
         Device newDevice = new Device();
         newDevice.setDeviceState(DeviceState.ASSIGNED);
-        newDevice.setDeviceType(body.deviceType());
+        if (body.deviceType().equalsIgnoreCase("smartphone")){
+            newDevice.setDeviceType(DeviceType.SMARTPHONE);
+        }else if (body.deviceType().equalsIgnoreCase("laptop")){
+            newDevice.setDeviceType(DeviceType.LAPTOP);
+        } else if (body.deviceType().equalsIgnoreCase("tablet")) {
+            newDevice.setDeviceType(DeviceType.TABLET);
+        }else {
+            throw new BadRequestException("Invalid device type");
+        }
         newDevice.setUser(foundUser);
         return deviceRepository.save(newDevice);
     }
