@@ -71,6 +71,7 @@ public class UserService {
             if (user.getId() == id) {
                 found = user;
                 found.setName(body.getName());
+                found.setUsername(body.getUsername());
                 found.setSurname(body.getSurname());
                 found.setAvatar("https://ui-avatars.com/api/?name=" + body.getName() + "+" + body.getSurname());
                 found.setEmail(body.getEmail());
