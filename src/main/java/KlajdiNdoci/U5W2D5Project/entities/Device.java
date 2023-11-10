@@ -17,7 +17,9 @@ public class Device {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Enumerated(EnumType.STRING)
     private DeviceType deviceType;
+    @Enumerated(EnumType.STRING)
     private DeviceState deviceState;
     @ManyToOne
     @JoinColumn(name = "user_id")

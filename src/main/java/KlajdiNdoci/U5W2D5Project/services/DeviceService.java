@@ -39,6 +39,11 @@ public class DeviceService {
     public Device save(NewDeviceDTO body) throws IOException {
         User foundUser = userService.findById(body.userId());
         Device newDevice = new Device();
+        if (newDevice.getDeviceState() == DeviceState.ASSIGNED) {
+            throw new BadRequestException("The device is already assigned to another user");
+        } else if (newDevice.getDeviceState() == DeviceState.DISMISSED) {
+            throw new BadRequestException("The device is dismissed");
+        }
         newDevice.setDeviceState(DeviceState.ASSIGNED);
         if (body.deviceType().equalsIgnoreCase("smartphone")){
             newDevice.setDeviceType(DeviceType.SMARTPHONE);
@@ -72,10 +77,19 @@ public class DeviceService {
         deviceRepository.delete(found);
     }
 
-    public Device findByIdAndUpdate(int id, Device body) throws NotFoundException {
-        Device found = this.findById(id);
-        found.setUser(body.getUser());
-        found.setDeviceState(body.getDeviceState());
-        return deviceRepository.save(found);
+    public Device findByIdAndUpdate(int id, NewDeviceDTO body) throws NotFoundException {
+        Device foundDevice = this.findById(id);
+        User foundUser = userService.findById(body.userId());
+        foundDevice.setUser(foundUser);
+        if (body.deviceType().equalsIgnoreCase("smartphone")){
+            foundDevice.setDeviceType(DeviceType.SMARTPHONE);
+        }else if (body.toString().equalsIgnoreCase("laptop")){
+            foundDevice.setDeviceType(DeviceType.LAPTOP);
+        } else if (body.toString().equalsIgnoreCase("tablet")) {
+            foundDevice.setDeviceType(DeviceType.TABLET);
+        }else {
+            throw new BadRequestException("Invalid device type");
+        }
+        return deviceRepository.save(foundDevice);
     }
 }

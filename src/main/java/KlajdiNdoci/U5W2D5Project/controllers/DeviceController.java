@@ -51,7 +51,7 @@ public class DeviceController {
     }
 
     @PutMapping("/{id}")
-    public Device findByIdAndUpdate(@PathVariable int id, @RequestBody Device body) {
+    public Device findByIdAndUpdate(@PathVariable int id, @RequestBody NewDeviceDTO body) {
         return deviceService.findByIdAndUpdate(id, body);
     }
 
