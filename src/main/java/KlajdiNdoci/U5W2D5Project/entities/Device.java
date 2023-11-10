@@ -4,12 +4,14 @@ import KlajdiNdoci.U5W2D5Project.enums.DeviceState;
 import KlajdiNdoci.U5W2D5Project.enums.DeviceType;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Entity
 @Getter
 @ToString
+@NoArgsConstructor
 @Table(name = "devices")
 public class Device {
     @Id
@@ -20,6 +22,12 @@ public class Device {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public Device(DeviceType deviceType, DeviceState deviceState, User user) {
+        this.deviceType = deviceType;
+        this.deviceState = DeviceState.AVAILABLE;
+        this.user = user;
+    }
 
     public void setDeviceType(DeviceType deviceType) {
         this.deviceType = deviceType;

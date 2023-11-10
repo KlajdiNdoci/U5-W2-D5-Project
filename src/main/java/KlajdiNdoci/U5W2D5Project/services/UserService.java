@@ -65,23 +65,12 @@ public class UserService {
     }
 
     public User findByIdAndUpdate(int id, User body) throws NotFoundException{
-        User found = null;
-
-        for (User user : userRepository.findAll()) {
-            if (user.getId() == id) {
-                found = user;
-                found.setName(body.getName());
-                found.setUsername(body.getUsername());
-                found.setSurname(body.getSurname());
-                found.setAvatar("https://ui-avatars.com/api/?name=" + body.getName() + "+" + body.getSurname());
-                found.setEmail(body.getEmail());
-            }
-        }
-        if (found == null) {
-            throw new NotFoundException(id);
-        } else {
-            return userRepository.save(found);
-        }
+        User found = this.findById(id);
+        found.setUsername(body.getUsername());
+        found.setEmail(body.getEmail());
+        found.setSurname(body.getSurname());
+        found.setName(body.getName());
+        return userRepository.save(found);
     }
     public User uploadPicture(MultipartFile file, long id) throws IOException {
         User user = userRepository.findById(id).orElseThrow(()-> new NotFoundException(id));
