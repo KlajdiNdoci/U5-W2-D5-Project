@@ -9,7 +9,6 @@ import lombok.ToString;
 
 @Entity
 @Getter
-@Setter
 @ToString
 @Table(name = "devices")
 public class Device {
@@ -21,4 +20,17 @@ public class Device {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public void setDeviceType(DeviceType deviceType) {
+        this.deviceType = deviceType;
+    }
+
+    public void setDeviceState(DeviceState deviceState) {
+        this.deviceState = deviceState;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
+

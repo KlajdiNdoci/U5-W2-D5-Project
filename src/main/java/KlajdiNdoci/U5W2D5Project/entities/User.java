@@ -10,7 +10,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @ToString
 @Table(name = "users")
 public class User {
@@ -21,8 +20,33 @@ public class User {
     private String name;
     private String surname;
     private String email;
+    private String avatar;
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     @ToString.Exclude
     private List<Device> devices;
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public void setDevices(List<Device> devices) {
+        this.devices = devices;
+    }
 }
