@@ -55,4 +55,9 @@ public class DeviceController {
         return deviceService.findByIdAndUpdate(id, body);
     }
 
+    @PatchMapping ("/{id}/assign")
+    public Device findByIdAndAssign(@PathVariable int id, @RequestBody NewDeviceDTO body){
+        return deviceService.findByIdAndAssign(id, body);
+    }
+
 }

@@ -37,14 +37,14 @@ public class DeviceService {
     }
 
     public Device save(NewDeviceDTO body) throws IOException {
-        User foundUser = userService.findById(body.userId());
+
         Device newDevice = new Device();
-        if (newDevice.getDeviceState() == DeviceState.ASSIGNED) {
-            throw new BadRequestException("The device is already assigned to another user");
-        } else if (newDevice.getDeviceState() == DeviceState.DISMISSED) {
-            throw new BadRequestException("The device is dismissed");
+        newDevice.setDeviceState(DeviceState.AVAILABLE);
+        if (body.userId() !=null){
+            User foundUser = userService.findById(body.userId());
+            newDevice.setDeviceState(DeviceState.ASSIGNED);
+            newDevice.setUser(foundUser);
         }
-        newDevice.setDeviceState(DeviceState.ASSIGNED);
         if (body.deviceType().equalsIgnoreCase("smartphone")){
             newDevice.setDeviceType(DeviceType.SMARTPHONE);
         }else if (body.deviceType().equalsIgnoreCase("laptop")){
@@ -54,7 +54,6 @@ public class DeviceService {
         }else {
             throw new BadRequestException("Invalid device type");
         }
-        newDevice.setUser(foundUser);
         return deviceRepository.save(newDevice);
     }
 
@@ -79,8 +78,11 @@ public class DeviceService {
 
     public Device findByIdAndUpdate(int id, NewDeviceDTO body) throws NotFoundException {
         Device foundDevice = this.findById(id);
-        User foundUser = userService.findById(body.userId());
-        foundDevice.setUser(foundUser);
+        if (body.userId()!= null){
+            User foundUser = userService.findById(body.userId());
+            foundDevice.setUser(foundUser);
+        }
+
         if (body.deviceType().equalsIgnoreCase("smartphone")){
             foundDevice.setDeviceType(DeviceType.SMARTPHONE);
         }else if (body.toString().equalsIgnoreCase("laptop")){
@@ -89,6 +91,20 @@ public class DeviceService {
             foundDevice.setDeviceType(DeviceType.TABLET);
         }else {
             throw new BadRequestException("Invalid device type");
+        }
+        return deviceRepository.save(foundDevice);
+    }
+
+    public Device findByIdAndAssign(int id, NewDeviceDTO body) throws NotFoundException{
+        Device foundDevice = this.findById(id);
+        if (body.userId()!= null){
+            User foundUser = userService.findById(body.userId());
+            foundDevice.setUser(foundUser);
+            if (foundDevice.getDeviceState() == DeviceState.ASSIGNED) {
+                throw new BadRequestException("The device is already assigned to another user");
+            } else if (foundDevice.getDeviceState() == DeviceState.DISMISSED) {
+                throw new BadRequestException("The device is dismissed");
+            }
         }
         return deviceRepository.save(foundDevice);
     }
