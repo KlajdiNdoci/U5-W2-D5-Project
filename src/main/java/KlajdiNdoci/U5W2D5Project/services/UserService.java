@@ -1,5 +1,6 @@
 package KlajdiNdoci.U5W2D5Project.services;
 
+import KlajdiNdoci.U5W2D5Project.entities.Device;
 import KlajdiNdoci.U5W2D5Project.entities.User;
 import KlajdiNdoci.U5W2D5Project.exceptions.BadRequestException;
 import KlajdiNdoci.U5W2D5Project.exceptions.NotFoundException;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
+
 @Service
 public class UserService {
     @Autowired
@@ -61,6 +64,8 @@ public class UserService {
 
     public void findByIdAndDelete(int id)throws NotFoundException {
         User found = this.findById(id);
+        List<Device> devices = found.getDevices();
+        devices.forEach(device -> device.setUser(null));
         userRepository.delete(found);
     }
 
