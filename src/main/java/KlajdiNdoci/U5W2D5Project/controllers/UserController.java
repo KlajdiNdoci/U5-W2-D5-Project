@@ -23,8 +23,8 @@ public class UserController {
 
     @GetMapping("")
     public Page<User> getUser(@RequestParam(defaultValue = "0") int page,
-                                @RequestParam(defaultValue = "10") int size,
-                                @RequestParam(defaultValue = "id") String orderBy){
+                              @RequestParam(defaultValue = "10") int size,
+                              @RequestParam(defaultValue = "id") String orderBy){
         return userService.getUsers(page, size, orderBy);
     }
 
@@ -54,8 +54,12 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public User findByIdAndUpdate(@PathVariable int id, @RequestBody User body) {
-        return userService.findByIdAndUpdate(id, body);
+    public User findByIdAndUpdate(@PathVariable int id, @RequestBody @Validated NewUserDTO body,BindingResult validation) {
+        if (validation.hasErrors()){
+            throw new BadRequestException(validation.getAllErrors());
+        }else {
+            return userService.findByIdAndUpdate(id, body);
+        }
     }
 
     @PostMapping("/{id}/upload")

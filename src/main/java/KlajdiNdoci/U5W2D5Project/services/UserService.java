@@ -73,12 +73,13 @@ public class UserService {
         userRepository.delete(found);
     }
 
-    public User findByIdAndUpdate(int id, User body) throws NotFoundException{
+    public User findByIdAndUpdate(int id, NewUserDTO body) throws NotFoundException{
         User found = this.findById(id);
-        found.setUsername(body.getUsername());
-        found.setEmail(body.getEmail());
-        found.setSurname(body.getSurname());
-        found.setName(body.getName());
+        found.setUsername(body.username());
+        found.setEmail(body.email());
+        found.setSurname(body.surname());
+        found.setName(body.name());
+        found.setAvatar("https://ui-avatars.com/api/?name=" + body.name() + "+" + body.surname());
         return userRepository.save(found);
     }
     public User uploadPicture(MultipartFile file, long id) throws IOException {
