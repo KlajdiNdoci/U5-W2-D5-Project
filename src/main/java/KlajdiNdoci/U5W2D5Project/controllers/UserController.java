@@ -64,7 +64,11 @@ public class UserController {
 
     @PostMapping("/{id}/upload")
     public User upload(@RequestParam("avatar") MultipartFile body, @PathVariable long id) throws IOException {
-        return userService.uploadPicture(body, id);
+        try {
+            return userService.uploadPicture(body, id);
+        }catch (Exception e){
+            throw new BadRequestException(e.getMessage());
+        }
     }
 }
 

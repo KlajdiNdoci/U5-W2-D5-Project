@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -63,14 +64,26 @@ public class UserService {
         }
     }
 
-    public void findByIdAndDelete(int id)throws NotFoundException {
+    public void findByIdAndDelete(long id)throws NotFoundException {
         User found = this.findById(id);
         List<Device> devices = found.getDevices();
         for (Device device : devices) {
             device.setUser(null);
             device.setDeviceState(DeviceState.AVAILABLE);
+
+        }
+        try {
+            Map result = cloudinary.uploader().destroy(getPublicIdFromUrl(found.getAvatar()), ObjectUtils.emptyMap());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         userRepository.delete(found);
+    }
+
+    private String getPublicIdFromUrl(String imageUrl) {
+        int startIndex = imageUrl.lastIndexOf("/") + 1;
+        int endIndex = imageUrl.lastIndexOf(".");
+        return imageUrl.substring(startIndex, endIndex);
     }
 
     public User findByIdAndUpdate(int id, NewUserDTO body) throws NotFoundException{
